@@ -35,7 +35,7 @@ const Checkbox = () => {
         options={ListingId}
         onChange={handleDropdownChange}
         placeholder='Search Items'
-        label={"Search Dropdown"}
+        label={"Checkbox Dropdown"}
         className={"w-[350px]"}
         type='checkbox'
       />

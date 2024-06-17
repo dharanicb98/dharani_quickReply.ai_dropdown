@@ -35,7 +35,7 @@ const RadioDropDown = () => {
         options={ListingId}
         onChange={handleDropdownChange}
         placeholder='Search Items'
-        label={"Search Dropdown"}
+        label={"Radio Dropdown"}
         className={"w-[350px]"}
         type='radio'
       />

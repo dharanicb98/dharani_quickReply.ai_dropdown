@@ -4,6 +4,7 @@ import Navber from '../components/layout';
 import SearchDropdown from '../pages/searchDropdown';
 import Checkbox from '../pages/checkbox';
 import RadioDropDown from '../pages/radio';
+import IconDropdown from '../pages/iconDropdown';
 
 
 const ProtectedRoutes = () => {
@@ -15,6 +16,7 @@ const ProtectedRoutes = () => {
           <Route path="/" element={<SearchDropdown />} />
           <Route path="/checkbox" element={<Checkbox />} />
           <Route path="/radio" element={<RadioDropDown />} />
+          <Route path="/iconbar" element={<IconDropdown />} />
         </Routes>
     </div>
   )
