@@ -29,15 +29,16 @@ const RadioDropDown = () => {
   };
 
   return (
-    <div className='ml-[50px] h-screen flex justify-center mt-20'>
+    <div className='ml-[50px] h-screen flex justify-center items-center'>
       <div className=''>
       <SelectDropdown
         options={ListingId}
         onChange={handleDropdownChange}
         placeholder='Search Items'
         label={"Radio Dropdown"}
-        className={"w-[350px]"}
+        className={"w-[550px]"}
         type='radio'
+        labelStyle={"text-xl font-bold mb-4"}
       />
       <p className='mt-10'>Selected Option ID: {selectedItemId}</p>
       </div>

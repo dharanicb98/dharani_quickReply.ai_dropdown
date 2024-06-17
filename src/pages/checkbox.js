@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { getProdutData } from '../services';
-import SelectDropdown from "../components/dropdown";
+import SelectDropdown from '../components/dropdown';
 
 const Checkbox = () => {
   const [data, setData] = useState([]);
-  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [selectedItemIds, setSelectedItemIds] = useState([]);
 
   useEffect(() => {
     getData();
@@ -24,22 +24,33 @@ const Checkbox = () => {
     return { value: title, id: id };
   });
 
-  const handleDropdownChange = (itemId) => {
-    setSelectedItemId(itemId);
+  const handleDropdownChange = (itemIds) => {
+    setSelectedItemIds(itemIds);
   };
 
   return (
-    <div className='ml-[50px] h-screen flex justify-center mt-20'>
-      <div className=''>
-      <SelectDropdown
-        options={ListingId}
-        onChange={handleDropdownChange}
-        placeholder='Search Items'
-        label={"Checkbox Dropdown"}
-        className={"w-[350px]"}
-        type='checkbox'
-      />
-      <p className='mt-10'>Selected Option ID: {selectedItemId}</p>
+    <div className='ml-[50px] h-screen flex justify-center items-center'>
+      <div>
+        <SelectDropdown
+          options={ListingId}
+          onChange={handleDropdownChange}
+          placeholder='Search Items'
+          label={"Checkbox Dropdown"}
+          className={"w-[550px]"}
+          type='checkbox'
+          labelStyle={"text-xl font-bold mb-4"}
+        />
+        <div className='mt-10'>
+          <p className='mb-2'>Selected Option Titles:</p>
+          <ul className='flex flex-col gap-3'>
+            {selectedItemIds.map((id) => {
+              const selectedItem = ListingId.find((each) => each.id === id);
+              return (
+                <li key={id}>{selectedItem?.value}</li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );

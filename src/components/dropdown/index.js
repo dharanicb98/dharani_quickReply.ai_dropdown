@@ -120,7 +120,7 @@ const SelectDropdown = ({ options, placeholder = "", onChange, label, labelStyle
                     placeholder={placeholder} 
                     value={inputValue} 
                     onChange={onInputChange}
-                    className='dropdown-input' 
+                    className={`dropdown-input ${INPUT_STYLE}`} 
                     required 
                 />
                 <div className={`dropdown-icon ${open && "rotate-180"}`}>

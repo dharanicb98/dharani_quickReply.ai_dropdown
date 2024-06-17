@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getProdutData } from '../services';
 import SelectDropdown from "../components/dropdown";
 
-const SearchDropdown = () => {
+const RadioDropdown = () => {
   const [data, setData] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -29,19 +29,26 @@ const SearchDropdown = () => {
   };
 
   return (
-    <div className='ml-[50px] h-screen flex justify-center mt-20'>
+    <div className='ml-[50px] h-screen flex justify-center items-center'>
       <div className=''>
       <SelectDropdown
         options={ListingId}
         onChange={handleDropdownChange}
         placeholder='Search Items'
-        label={"Search Dropdown"}
-        className={"w-[350px]"}
+        label={"Radio Dropdown"}
+        className={"w-[550px]"}
+        type='radio'
+        labelStyle={"text-xl font-bold mb-4"}
       />
-      <p className='mt-10'>Selected Option ID: {selectedItemId}</p>
+       <div className='mt-10'>
+          <p className='mb-2'>Selected Option Title:</p>
+          {selectedItemId && (
+            <p>{ListingId.find((each) => each.id === selectedItemId)?.value}</p>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default SearchDropdown;
+export default RadioDropdown;

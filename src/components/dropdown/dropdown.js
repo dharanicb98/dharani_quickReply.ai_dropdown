@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Info, UserCircle } from 'phosphor-react';
-import 'tailwindcss/tailwind.css';
+import React, { useState, useEffect, useRef } from 'react';
+import { UserCircle, Info } from 'phosphor-react';
 
 const Dropdown = ({
   label,
@@ -16,59 +15,102 @@ const Dropdown = ({
   items,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(activeItemIndex);
-  const toggleDropdown = () => setIsOpen(!isOpen);
-  const handleSelect = (index) => {
-    setSelectedIndex(index);
-    setIsOpen(false);
+  const [selectedItem, setSelectedItem] = useState(text);
+  const dropdownRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
   };
 
-  const dropdownClass = `relative inline-block w-full`;
-  const dropdownContentClass = `absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 ${isOpen ? 'block' : 'hidden'}`;
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const renderDropdownItems = () => {
+    switch (type) {
+      case 'SingleNoIcon':
+        return (
+          <ul>
+            {items.map((item, index) => (
+              <li
+                key={index}
+                className={`p-2 cursor-pointer ${index === activeItemIndex ? 'bg-blue-100' : ''}`}
+                onClick={() => handleItemClick(item)}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        );
+      case 'SingleRadio':
+        return (
+          <ul>
+            {items.map((item, index) => (
+              <li
+                key={index}
+                className={`p-2 cursor-pointer flex items-center ${index === activeItemIndex ? 'bg-blue-100' : ''}`}
+                onClick={() => handleItemClick(item)}
+              >
+                <input
+                  type="radio"
+                  name="dropdown-radio"
+                  className="mr-2"
+                  checked={index === activeItemIndex}
+                  readOnly
+                />
+                {item}
+              </li>
+            ))}
+          </ul>
+        );
+      case 'Multi':
+        return (
+          <ul>
+            {items.map((item, index) => (
+              <li key={index} className="p-2 cursor-pointer flex items-center">
+                <input type="checkbox" className="mr-2" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const handleItemClick = (item) => {
+    setSelectedItem(item);
+    console.log(`Item clicked: ${item}`);
+    setIsOpen(false); // Close the dropdown after selection
+  };
 
   return (
-    <div className={dropdownClass}>
+    <div className="relative" ref={dropdownRef}>
       {labelVisibility === 'Visible' && (
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-          {labelIconVisibility === 'Visible' && <Info size={16} className="inline ml-2 text-gray-400" />}
-          {required === 'Yes' && <span className="text-red-500"> *</span>}
+        <label className="block mb-1">
+          {labelIconVisibility === 'Visible' && <Info size={16} className="inline mr-1" />}
+          {label} {required && '*'}
         </label>
       )}
       <div
-        className={`mt-1 flex items-center border ${
-          status === 'Error' ? 'border-red-500' : 'border-gray-300'
-        } rounded-md shadow-sm px-3 py-2 cursor-pointer ${status === 'Disabled' ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'}`}
-        onClick={status !== 'Disabled' ? toggleDropdown : undefined}
+        className={`flex items-center border p-2 cursor-pointer ${status === 'Disabled' ? 'bg-gray-200' : 'bg-white'}`}
+        onClick={() => status !== 'Disabled' && setIsOpen(!isOpen)}
       >
-        {leftIconVisibility === 'Visible' && <UserCircle size={24} className="text-gray-400 mr-2" />}
-        <span className="flex-1">{text}</span>
-        <span className="ml-2">&#x25bc;</span>
+        {leftIconVisibility === 'Visible' && <UserCircle size={24} className="mr-2" />}
+        <span>{selectedItem}</span>
       </div>
-      <div className={dropdownContentClass}>
-        {type === 'Multi'
-          ? items.map((item, index) => (
-              <div
-                key={index}
-                className={`p-2 hover:bg-gray-200 ${selectedIndex === index ? 'bg-gray-100' : ''}`}
-                onClick={() => handleSelect(index)}
-              >
-                <input type="checkbox" className="mr-2" checked={selectedIndex === index} readOnly />
-                {item}
-              </div>
-            ))
-          : items.map((item, index) => (
-              <div
-                key={index}
-                className={`p-2 hover:bg-gray-200 ${selectedIndex === index ? 'bg-gray-100' : ''}`}
-                onClick={() => handleSelect(index)}
-              >
-                <input type="radio" className="mr-2" checked={selectedIndex === index} readOnly />
-                {item}
-              </div>
-            ))}
-      </div>
-      {helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
+      {isOpen && (
+        <div className="absolute mt-1 border bg-white w-full z-10">
+          {renderDropdownItems()}
+        </div>
+      )}
+      {helperText && <p className="mt-1 text-sm text-gray-500">{helperText}</p>}
     </div>
   );
 };
