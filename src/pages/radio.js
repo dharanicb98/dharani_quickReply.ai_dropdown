@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getProdutData } from '../services';
 import SelectDropdown from "../components/dropdown";
 
-const RadioDropDown = () => {
+const RadioDropdown = () => {
   const [data, setData] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -29,21 +29,26 @@ const RadioDropDown = () => {
   };
 
   return (
-    <div className='ml-[50px] h-screen flex justify-center items-center'>
-      <div className=''>
-      <SelectDropdown
-        options={ListingId}
-        onChange={handleDropdownChange}
-        placeholder='Search Items'
-        label={"Radio Dropdown"}
-        className={"w-[550px]"}
-        type='radio'
-        labelStyle={"text-xl font-bold mb-4"}
-      />
-      <p className='mt-10'>Selected Option ID: {selectedItemId}</p>
+    <div className='ml-[20px] sm:ml-[30px] md:ml-[50px] h-screen flex justify-center items-center'>
+      <div className='w-full max-w-[300px] sm:max-w-[400px] md:max-w-[550px]'>
+        <SelectDropdown
+          options={ListingId}
+          onChange={handleDropdownChange}
+          placeholder='Search Items'
+          label={"Radio Dropdown"}
+          className={"w-full mx-4"}
+          type='radio'
+          labelStyle={"text-xl font-bold mb-4"}
+        />
+        <div className='mt-10'>
+          <p className='mb-2'>Selected Option Title:</p>
+          {selectedItemId && (
+            <p>{ListingId.find((each) => each.id === selectedItemId)?.value}</p>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default RadioDropDown;
+export default RadioDropdown;

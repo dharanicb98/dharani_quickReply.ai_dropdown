@@ -29,16 +29,16 @@ const Checkbox = () => {
   };
 
   return (
-    <div className='ml-[50px] h-screen flex justify-center items-center'>
-      <div>
+    <div className='flex justify-center items-center h-screen'>
+      <div className='w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-4'>
         <SelectDropdown
           options={ListingId}
           onChange={handleDropdownChange}
           placeholder='Search Items'
           label={"Checkbox Dropdown"}
-          className={"w-[550px]"}
+          className={"w-full"}
           type='checkbox'
-          labelStyle={"text-xl font-bold mb-4"}
+          labelStyle={"text-lg sm:text-xl font-bold mb-4"}
         />
         <div className='mt-10'>
           <p className='mb-2'>Selected Option Titles:</p>

@@ -28,8 +28,7 @@ const SelectDropdown = ({ options, placeholder = "", onChange, label, labelStyle
                     setInputValue(filterSearch[active]?.value);
                     onChange(filterSearch[active]?.id);
                     setActiveID(filterSearch[active]?.id);
-                }
-                else if (active === filterSearch.length - 1) {
+                } else if (active === filterSearch.length - 1) {
                     active = -1;
                 }
             } else if (e.keyCode === 38) {
@@ -38,12 +37,10 @@ const SelectDropdown = ({ options, placeholder = "", onChange, label, labelStyle
                     setInputValue(filterSearch[active]?.value);
                     onChange(filterSearch[active]?.id);
                     setActiveID(filterSearch[active]?.id);
-                }
-                else if (active === 0 || active === -1) {
+                } else if (active === 0 || active === -1) {
                     active = filterSearch.length;
                 }
-            }
-            else {
+            } else {
                 active = 0;
             }
             if (e.key === "Enter") {

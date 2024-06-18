@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { UserCircle, Info } from 'phosphor-react';
+import { ChevronDownIcon } from '../Icons'; // Import your ChevronDownIcon component
 
 const Dropdown = ({
   label,
@@ -13,9 +14,14 @@ const Dropdown = ({
   type,
   activeItemIndex,
   items,
+  onChange,
+  className,
+  labelStyle,
+  placeholder,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(text);
+  const [activeIndex, setActiveIndex] = useState(activeItemIndex);
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -31,6 +37,10 @@ const Dropdown = ({
     };
   }, []);
 
+  useEffect(() => {
+    setSelectedItem(items[activeItemIndex]);
+  }, [activeItemIndex, items]);
+
   const renderDropdownItems = () => {
     switch (type) {
       case 'SingleNoIcon':
@@ -39,8 +49,10 @@ const Dropdown = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                className={`p-2 cursor-pointer ${index === activeItemIndex ? 'bg-blue-100' : ''}`}
-                onClick={() => handleItemClick(item)}
+                className={`px-4 py-2 cursor-pointer flex items-center hover:bg-green-200 ${
+                  index === activeIndex ? 'bg-blue-100' : ''
+                }`}
+                onClick={() => handleItemClick(item, index)}
               >
                 {item}
               </li>
@@ -53,15 +65,17 @@ const Dropdown = ({
             {items.map((item, index) => (
               <li
                 key={index}
-                className={`p-2 cursor-pointer flex items-center ${index === activeItemIndex ? 'bg-blue-100' : ''}`}
-                onClick={() => handleItemClick(item)}
+                className={`px-4 py-2 cursor-pointer flex items-center hover:bg-green-200 ${
+                  index === activeIndex ? 'bg-blue-100' : ''
+                }`}
+                onClick={() => handleItemClick(item, index)}
               >
                 <input
                   type="radio"
                   name="dropdown-radio"
-                  className="mr-2"
-                  checked={index === activeItemIndex}
+                  checked={index === activeIndex}
                   readOnly
+                  className="mr-2"
                 />
                 {item}
               </li>
@@ -72,7 +86,7 @@ const Dropdown = ({
         return (
           <ul>
             {items.map((item, index) => (
-              <li key={index} className="p-2 cursor-pointer flex items-center">
+              <li key={index} className="px-4 py-2 cursor-pointer flex items-center hover:bg-green-200">
                 <input type="checkbox" className="mr-2" />
                 {item}
               </li>
@@ -84,29 +98,42 @@ const Dropdown = ({
     }
   };
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (item, index) => {
     setSelectedItem(item);
-    console.log(`Item clicked: ${item}`);
-    setIsOpen(false); // Close the dropdown after selection
+    setActiveIndex(index);
+    setIsOpen(false);
+    if (onChange) onChange(item);
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className={`relative ${className}`} ref={dropdownRef}>
       {labelVisibility === 'Visible' && (
-        <label className="block mb-1">
+        <label className={`block mb-1 ${labelStyle}`}>
           {labelIconVisibility === 'Visible' && <Info size={16} className="inline mr-1" />}
           {label} {required && '*'}
         </label>
       )}
       <div
-        className={`flex items-center border p-2 cursor-pointer ${status === 'Disabled' ? 'bg-gray-200' : 'bg-white'}`}
+        className={`flex items-center border border-gray-300 rounded-md p-2 cursor-pointer ${
+          status === 'Disabled' ? 'bg-gray-200' : 'bg-white'
+        }`}
         onClick={() => status !== 'Disabled' && setIsOpen(!isOpen)}
       >
         {leftIconVisibility === 'Visible' && <UserCircle size={24} className="mr-2" />}
-        <span>{selectedItem}</span>
+        <input
+          type="text"
+          className="flex-grow border-none outline-none"
+          value={selectedItem}
+          onChange={(e) => setSelectedItem(e.target.value)}
+          placeholder={placeholder}
+          readOnly
+        />
+        <div className={`transition-transform ${isOpen && 'transform rotate-180'}`}>
+          <ChevronDownIcon size={20} />
+        </div>
       </div>
       {isOpen && (
-        <div className="absolute mt-1 border bg-white w-full z-10">
+        <div className="absolute mt-1 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 max-h-60 overflow-auto z-10">
           {renderDropdownItems()}
         </div>
       )}
