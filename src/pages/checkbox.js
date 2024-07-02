@@ -25,7 +25,7 @@ const Checkbox = () => {
   });
 
   const handleDropdownChange = (itemIds) => {
-    setSelectedItemIds(itemIds);
+    setSelectedItemIds(Array.isArray(itemIds) ? itemIds : []);
   };
 
   return (
